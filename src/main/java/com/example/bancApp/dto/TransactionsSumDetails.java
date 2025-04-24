@@ -5,6 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public interface TransactionsSumDetails {
-    LocalDateTime getTransactionDate();
+    LocalDate getTransactionDate();
     BigDecimal getAmount();
 }

@@ -5,6 +5,7 @@ import com.example.bancApp.dto.AccountDto;
 import com.example.bancApp.dto.AuthenticationRequest;
 import com.example.bancApp.dto.AuthenticationResponse;
 import com.example.bancApp.dto.UserDto;
+import com.example.bancApp.models.Account;
 import com.example.bancApp.models.Role;
 import com.example.bancApp.models.User;
 import com.example.bancApp.repositories.RoleRepository;
@@ -23,12 +24,14 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    public static final String ROLE_USER = "ROLE_USER";
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final AccountService accountService;
@@ -36,8 +39,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
-    public static final String ROLE_USER = "ROLE_USER";
-
 
     @Override
     public Integer save(UserDto dto) {
@@ -59,27 +60,32 @@ public class UserServiceImpl implements UserService {
     public UserDto findById(Integer id) {
         return userRepository.findById(id)
                 .map(UserDto::fromEntity)
-                .orElseThrow(()->new EntityNotFoundException("the user is not found"));
+                .orElseThrow(() -> new EntityNotFoundException("the user is not found"));
     }
 
     @Override
     public void delete(Integer id) {
-userRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     @Override
     @Transactional
     public Integer validateAccount(Integer id) {
         User user = userRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("the user is not found"));
-        user.setActive(true);
-        userRepository.save(user);
+                .orElseThrow(() -> new EntityNotFoundException("the user account is not found for validation"));
 
-        AccountDto accountDto = AccountDto.builder()
-                .userDto(UserDto.fromEntity(user))
-                .build();
-        accountService.save(accountDto);
-
+        if (user.getAccount() == null) {
+            // create a bank account
+            AccountDto account = AccountDto.builder()
+                    .userDto(UserDto.fromEntity(user))
+                    .build();
+            var savedAccount = accountService.save(account);
+            user.setAccount(
+                    Account.builder()
+                            .id(savedAccount)
+                            .build()
+            );
+        }
         user.setActive(true);
         userRepository.save(user);
         return user.getId();
@@ -88,7 +94,7 @@ userRepository.deleteById(id);
     @Override
     public Integer invalidateAcount(Integer id) {
         User user = userRepository.findById(id)
-                .orElseThrow(()-> new EntityNotFoundException("the user is not found"));
+                .orElseThrow(() -> new EntityNotFoundException("the user is not found for validation"));
         user.setActive(false);
         userRepository.save(user);
         return user.getId();
@@ -106,13 +112,12 @@ userRepository.deleteById(id);
 
         var savedUser = userRepository.save(user);
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userID",savedUser.getId());
-        claims.put("fullName",savedUser.getFirstName() + " " + savedUser.getLastName());
-        String token = jwtUtils.generateToken(savedUser,claims);
+        claims.put("userID", savedUser.getId());
+        claims.put("fullName", savedUser.getFirstName() + " " + savedUser.getLastName());
+        String token = jwtUtils.generateToken(savedUser, claims);
         return AuthenticationResponse.builder()
                 .token(token)
                 .build();
-
 
 
     }
@@ -124,24 +129,26 @@ userRepository.deleteById(id);
         );
         final User user = userRepository.findByEmail(request.getEmail()).get();
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userID",user.getId());
-        claims.put("fullName",user.getFirstName()+" "+user.getLastName());
-        final String token = jwtUtils.generateToken(user,claims);
+        claims.put("userID", user.getId());
+        claims.put("fullName", user.getFirstName() + " " + user.getLastName());
+        final String token = jwtUtils.generateToken(user, claims);
         return AuthenticationResponse.builder()
                 .token(token)
                 .build();
     }
 
-    private Role findOrCreateRole(String roleName){
+    private Role findOrCreateRole(String roleName) {
         Role role = roleRepository.findRoleByName(roleName)
                 .orElse(null);
-        if(role == null){
-            return  roleRepository.save(
+        if (role == null) {
+            return roleRepository.save(
                     Role.builder()
                             .name(roleName)
                             .build()
             );
         }
-return role;
+        return role;
     }
+
+
 }

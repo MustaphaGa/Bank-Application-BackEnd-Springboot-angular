@@ -22,7 +22,7 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
 
     private static final String BEARER = "Bearer ";
     private  final UserRepository userRepository;
-private final JwtUtils jwtUtils;
+ private final JwtUtils jwtUtils;
     private static final String AUTHORIZATION ="Authorization" ;
 
     @Override

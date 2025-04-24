@@ -2,6 +2,9 @@ package com.example.bancApp.dto;
 
 import com.example.bancApp.models.Contact;
 import com.example.bancApp.models.User;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -11,9 +14,22 @@ import lombok.*;
 public class ContactDto {
 
     private  Integer id;
+    @NotNull(message = "le nom ne doit pas etre vide")
+    @NotBlank(message = "le nom ne doit pas etre vide")
+    @NotEmpty(message = "le nom ne doit pas etre vide")
     private  String firstName;
+    @NotNull(message = "le nom ne doit pas etre vide")
+    @NotBlank(message = "le nom ne doit pas etre vide")
+    @NotEmpty(message = "le nom ne doit pas etre vide")
     private  String lastName;
+    @NotNull(message = " email ne doit pas etre vide")
+    @NotBlank(message = "email ne doit pas etre vide")
+    @NotEmpty(message = "email ne doit pas etre vide")
     private  String email;
+    @NotNull(message = "iban ne doit pas etre vide")
+    @NotBlank(message = "iban ne doit pas etre vide")
+    @NotEmpty(message = "iban ne doit pas etre vide")
+    private  String iban ;
 
     private Integer userId;
     public static ContactDto fromEntity(Contact contact){
@@ -40,5 +56,5 @@ public class ContactDto {
                 )                .build();
     }
 
-    private  String iban ;
+
 }

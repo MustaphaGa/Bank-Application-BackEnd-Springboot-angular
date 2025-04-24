@@ -3,6 +3,7 @@ package com.example.bancApp.controllers;
 
 import com.example.bancApp.dto.TransactionsSumDetails;
 import com.example.bancApp.services.StatisticsService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.RequestEntity;
@@ -17,6 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/statistics")
 @RequiredArgsConstructor
+@Tag(name = "statistic")
 
 public class StatisticsController {
     private final StatisticsService statisticsService;

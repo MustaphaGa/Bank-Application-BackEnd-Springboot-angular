@@ -56,7 +56,7 @@ public class AccountServiceImpl implements AccountService {
     public AccountDto findById(Integer id) {
         return accountRepository.findById(id)
                 .map(AccountDto::fromEntity)
-                .orElseThrow(()->new EntityNotFoundException("the user with id is not found"));
+                .orElseThrow(()->new EntityNotFoundException("the user with id is not found" + id));
     }
 
     @Override

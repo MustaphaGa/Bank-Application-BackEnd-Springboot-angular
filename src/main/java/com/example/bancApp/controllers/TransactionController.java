@@ -2,6 +2,7 @@ package com.example.bancApp.controllers;
 
 import com.example.bancApp.dto.TransactionDto;
 import com.example.bancApp.services.TransactionService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
+@Tag(name = "transaction")
+
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -29,14 +32,17 @@ public class TransactionController {
     @GetMapping("/{transaction-id}")
     public ResponseEntity<TransactionDto> findById(
             @PathVariable("transaction-id") Integer transactionId
-    ){ return ResponseEntity.ok(transactionService.findById(transactionId));
+    ){
+        return ResponseEntity.ok(transactionService.findById(transactionId));
 
     }
+
 
     @GetMapping("/users/{user-id}")
     public ResponseEntity<List<TransactionDto>> findAllByUserId(
             @PathVariable("user-id") Integer userId
-    ){ return ResponseEntity.ok(transactionService.findAllByUserId(userId));
+    ){
+        return ResponseEntity.ok(transactionService.findAllByUserId(userId));
 
     }
     @DeleteMapping("/{transaction-id}")

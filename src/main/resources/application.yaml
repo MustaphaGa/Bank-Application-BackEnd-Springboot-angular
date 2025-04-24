@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/bank_db
+    url: jdbc:postgresql://localhost:5432/musta
     username: postgres
     password: 1111
 
@@ -9,6 +9,9 @@ spring:
     hibernate:
       ddl-auto: update
     database: postgresql
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+spring doc:
+      default-produces-media-type: application/json
 

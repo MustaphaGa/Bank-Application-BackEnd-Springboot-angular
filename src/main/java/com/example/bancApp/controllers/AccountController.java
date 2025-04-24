@@ -2,6 +2,7 @@ package com.example.bancApp.controllers;
 
 import com.example.bancApp.dto.AccountDto;
 import com.example.bancApp.services.AccountService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/account")
+@Tag(name = "account")
 public class AccountController {
 
     private final AccountService accountService;

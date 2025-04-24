@@ -23,7 +23,8 @@ public class Address extends AbstractEntity {
     private  Integer houseNumber;
 
     @OneToOne
-    @JoinColumn(name = "id_User")
+    @JoinColumn(name = "id_user")
+
     private User user;
 
 

@@ -3,6 +3,7 @@ package com.example.bancApp.controllers;
 import com.example.bancApp.dto.ContactDto;
 import com.example.bancApp.services.
         ContactService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/contact")
 @RequiredArgsConstructor
+@Tag(name = "contact")
 public class ContactController {
 
 private final ContactService contactService;

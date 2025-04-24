@@ -23,13 +23,13 @@ public class Transaction extends AbstractEntity {
     private String destinationIban;
 
     @Column(updatable = false)
-    private LocalDateTime transactionDate;
+    private LocalDate transactionDate;
 
     @Enumerated(EnumType.STRING)
     private  TransactionType type;
 
 
     @ManyToOne
-    @JoinColumn(name = "id_User")
+    @JoinColumn(name = "id_user")
     private User user;
 }

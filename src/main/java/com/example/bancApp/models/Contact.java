@@ -24,6 +24,6 @@ public class Contact extends AbstractEntity{
 
 
     @ManyToOne
-    @JoinColumn(name = "id_User")
+    @JoinColumn(name = "id_user")
     private  User user;
 }

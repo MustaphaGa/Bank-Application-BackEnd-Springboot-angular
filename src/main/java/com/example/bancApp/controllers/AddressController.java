@@ -2,6 +2,7 @@ package com.example.bancApp.controllers;
 
 import com.example.bancApp.dto.AddressDto;
 import com.example.bancApp.services.AddressService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/address")
 @RequiredArgsConstructor
+@Tag(name = "address")
 
 public class AddressController {
     private final AddressService addressService;
