@@ -31,6 +31,8 @@ public class TransactionDto {
 
     private TransactionType type;
     private Integer userId;
+    private Integer contactId;
+
 
     public static TransactionDto fromEntity(Transaction transaction) {
 

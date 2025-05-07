@@ -9,4 +9,5 @@ import java.util.List;
 public interface Contactrepository extends JpaRepository<Contact,Integer> {
 
     List<Contact> findAllByUserId(Integer userId);
+
 }

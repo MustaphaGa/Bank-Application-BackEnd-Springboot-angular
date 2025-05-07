@@ -30,6 +30,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public BigDecimal getAccountBalance(Integer userId) {
+
         return transactionRepository.findAccountBalance(userId);
     }
 

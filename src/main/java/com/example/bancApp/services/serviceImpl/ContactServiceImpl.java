@@ -54,4 +54,6 @@ public class ContactServiceImpl implements ContactService {
                 .map(ContactDto::fromEntity)
                 .collect(Collectors.toList());
     }
+
+
 }

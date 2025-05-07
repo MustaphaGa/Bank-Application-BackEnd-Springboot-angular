@@ -26,12 +26,10 @@ public class ContactDto {
     @NotBlank(message = "email ne doit pas etre vide")
     @NotEmpty(message = "email ne doit pas etre vide")
     private  String email;
-    @NotNull(message = "iban ne doit pas etre vide")
-    @NotBlank(message = "iban ne doit pas etre vide")
-    @NotEmpty(message = "iban ne doit pas etre vide")
-    private  String iban ;
 
+    private  String iban ;
     private Integer userId;
+
     public static ContactDto fromEntity(Contact contact){
         return ContactDto.builder()
                 .id(contact.getId())
