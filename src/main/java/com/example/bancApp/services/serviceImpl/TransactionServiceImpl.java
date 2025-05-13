@@ -10,6 +10,7 @@ import com.example.bancApp.services.TransactionService;
 import com.example.bancApp.validator.ObjectValidator;
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final EmailService emailService;
     private final ContactServiceImpl contactService;
 
+    @Transactional
     @Override
     public Integer save(TransactionDto dto)  {
         validator.validate(dto);
@@ -33,18 +35,27 @@ public class TransactionServiceImpl implements TransactionService {
         BigDecimal transactionMultiplier = BigDecimal.valueOf(getTransactionMultiplier(transaction.getType()));
         BigDecimal amount = transaction.getAmount().multiply(transactionMultiplier);
         transaction.setAmount(amount);
-Transaction transactionSaved = transactionRepository.save(transaction);
+        if(transaction.getType() == TransactionType.TRANSFERT) {
+            Transaction transactionSaved = transactionRepository.save(transaction);
+            try {
+                ContactDto contactDto = contactService.findById(dto.getContactId());
 
-        try {
-            ContactDto contactDto = contactService.findById(dto.getContactId());
+                emailService.sendEmail(dto, contactDto.getId());
+            } catch (MessagingException e) {
+                System.err.println("Erreur lors de l'envoi de l'email : " + e.getMessage());
+                // Tu peux aussi logger proprement ici
+            }
+            return transactionSaved.getId();
+        } else {
+            Transaction transactionSaved = transactionRepository.save(transaction);
+            return transactionSaved.getId();
 
-            emailService.sendEmail(dto, contactDto.getId());
-        } catch (MessagingException e) {
-            System.err.println("Erreur lors de l'envoi de l'email : " + e.getMessage());
-            // Tu peux aussi logger proprement ici
+
         }
 
-        return transactionSaved.getId();
+
+
+
     }
 
     @Override
